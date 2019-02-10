@@ -1,12 +1,17 @@
 function callScript(){
-    var input = document.getElementById("search_txt").value;
-    console.log(input);
+    var data = document.getElementById("search_txt").value;
+    console.log(data);
     $.ajax({
                   type: "POST",
-                  url: "https://localhost:8080/templetes/src/suggestor.py",
-                  data: input,
+                  url: "/suggestor",
+                  //data: JSON.stringify(input),
+                  data: data,
+                  //contentType: 'application/json; charset=UTF-8',
+                  dataType: 'json',
                   success: function(data) {
-                      alert("success returned");
+                  },
+                  error: function(xhr, type){
+                  	console.log("Error msg");
                   }
             });
      }

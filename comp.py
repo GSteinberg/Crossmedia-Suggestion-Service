@@ -1,21 +1,17 @@
-#!flask/bin/python
+from skimage.measure import compare_ssim
+from scipy.misc import imread
+import numpy as np
+import os
+ 
+img1 = imread('cover.jpg')
+similar_img = []
+for img in os.listdir('/home/yma73/Desktop/hackathon/images/'):
+	name = img
+	img2 = imread(img)
+	img2 = np.resize(img2, (img1.shape[0], img1.shape[1], img1.shape[2]))
 
-from flask import Flask, render_template, request, redirect, Response
-import random, json
-from flask import make_response
-import csv
-
-app = Flask(__name__)
-
-@app.route("/")
-def output(msg):
-    return render_template('web_page.html',msg)
-
-@app.route('/receiver', methods=['POST'])
-def worker():
-    data = request.get_json()
-    print(data)
-    process_data(data)
+	ssim = compare_ssim(img1, img2, multichannel=True)
+	similar_img.append((name,ssim))
 
 def process_data(data):
     with open ('art_database.csv') as a_csv:
@@ -45,8 +41,8 @@ def process_data(data):
             if i[0] == j[0]:
                 imagenames.append(i[0])
 
-    output(imagenames)
+    return imagenames
 
 
-if __name__ == "__main__":
-    app.run(debug = True)
+sorted(similar_img,key=lambda l:l[1],reverse=True)
+print(similar_img[1])
