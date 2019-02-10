@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, jsonify
+import comp as cp
 
 app = Flask(__name__)
 
@@ -7,17 +8,11 @@ def index():
 	return render_template('web_page.html')
 
 @app.route('/suggestor', methods=['POST'])
+
 def suggestor():
-
-	email = request.form['email']
-	name = request.form['name']
-
-	if name and email:
-		newName = name[::-1]
-
-		return jsonify({'name' : newName})
-
-	return jsonify({'error' : 'Missing data!'})
+	song_name = request.form['name']
+	images_names = cp.process_data(song_name)
+	return jsonify({'name' : images_names})
 
 if __name__ == '__main__':
 	app.run(debug=True)
