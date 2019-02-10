@@ -14,7 +14,7 @@ header {
 		opacity: 0.9;
 }
 
-.search_box{
+#search_box{
 	position:absolute;
   top:50%;
   left:50%;
@@ -30,7 +30,7 @@ header {
 	border-radius: 10px;
 }
 
-.search_button{
+#search_button{
 
 	color: #87AFC7;
 	width: 40px;
@@ -41,12 +41,12 @@ header {
 	align-items: center;
 }
 
-.search_button:hover{  /* change the stlye of the button when click it */
+#search_button:hover{  /* change the stlye of the button when click it */
 	background-color: #000000;
 	color: white;
 }
 
-.search_txt{
+#search_txt{
 	border: none;
 	background: none;
 	outline: none;
