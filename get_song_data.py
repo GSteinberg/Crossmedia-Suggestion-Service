@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import requests
 import shutil
-import urllib.request
+from urllib.request import urlopen
 
 song, artist = "Space Oddity, David Bowie".split(", ")
 
@@ -53,7 +53,13 @@ progress_bars = bpm_driver.find_elements_by_class_name('progress-bar')
 for bar in progress_bars:
 	if bar.text == "Energy":
 		energy = bar.get_attribute('style').strip("width: %;")
-		
+if 0 <= energy <= 45:
+	energy = 1
+elif 45 < energy <= 75:
+	energy = 2
+else:
+	energy = 3
+	
 # Get year
 song_year = song_driver.find_element_by_class_name('song-release-year-text').text
 
@@ -65,4 +71,11 @@ album_cover.click()
 image = song_driver.find_element_by_tag_name("img")
 img_src = image.get_attribute("src")
 
-urllib.request.urlretrieve(img_src, "album_cover.jpg")"""
+#urllib.request.urlretrieve(img_src, "album_cover.jpg")
+	  
+req = urlopen(img_src)
+gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)  # Only for gangstars
+info = urlopen(req, context=gcontext).read()
+
+ and i-31 == artist_idx
+"""
