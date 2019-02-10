@@ -54,11 +54,11 @@ for bar in progress_bars:
 	if bar.text == "Energy":
 		energy = bar.get_attribute('style').strip("width: %;")
 if 0 <= energy <= 45:
-	energy = 1
+	energy = "low"
 elif 45 < energy <= 75:
-	energy = 2
+	energy = "med"
 else:
-	energy = 3
+	energy = "high"
 	
 # Get year
 song_year = song_driver.find_element_by_class_name('song-release-year-text').text
