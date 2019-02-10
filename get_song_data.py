@@ -1,5 +1,8 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
+import requests
+import shutil
+import urllib.request
 
 song, artist = "Space Oddity, David Bowie".split(", ")
 
@@ -28,15 +31,32 @@ song_submit_button = song_driver.find_element_by_class_name('site-search-button'
 song_submit_button.click()
 
 # Click correct search result
-#TODO for bpm
-results = song_driver.find_elements_by_xpath('//*[@href]')
-for i, val in enumerate(results):
+"""
+artist_idx = 0
+bpm_artist_results = bpm_driver.find_elements_by_class_name('blur')
+for i, val in enumerate(bpm_artist_results):
+	if val.text == artist:
+		artist_idx = i
+bpm_song_results = bpm_driver.find_elements_by_xpath('//*[@href]')
+for i, val in enumerate(bpm_song_results):
+	if song.lower().replace(' ', '-') in val.get_attribute('href'):
+		bpm_song_results[i].click()
+		break
+"""
+# ------------------------------------------------------------------------
+song_results = song_driver.find_elements_by_xpath('//*[@href]')
+for i, val in enumerate(song_results):
 	if artist.lower().replace(' ', '-') in val.get_attribute('href'):
-		results[i-1].click()
+		song_results[i-1].click()
 		break
 		
 # Get energy info
-
+"""
+progress_bars = bpm_driver.find_elements_by_class_name('progress-bar')
+for bar in progress_bars:
+	if bar.text == "Energy":
+		energy = bar.get_attribute('style').strip("width: %;")
+"""
 		
 # Get year
 song_year = song_driver.find_element_by_class_name('song-release-year-text').text
@@ -44,72 +64,8 @@ song_year = song_driver.find_element_by_class_name('song-release-year-text').tex
 # Get album cover
 album_cover = song_driver.find_element_by_class_name('lazy')
 album_cover.click()
-album_cover = song_driver.find_element_by_class_name('media-gall')
+# Get src text
+image = song_driver.find_element_by_tag_name("img")
+img_src = image.get_attribute("src")
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-"""
-# Find search results
-#bpm_results_artist = bpm_driver.find_elements_by_partial_link_text(artist)
-#bpm_results_song = bpm_driver.find_elements_by_partial_link_text(song)
-song_results_artist = song_driver.find_elements_by_partial_link_text(artist)
-song_results_song = song_driver.find_elements_by_partial_link_text(song)
-print(song_results_song)
-
-# If song doesn't exist
-if len(song_results_artist) == 0 or len(song_results_song) == 0 or \
-   len(bpm_results_artist) == 0 or len(bpm_results_song) == 0:
-   print("Sorry! We can't find a song by that artist")
-
-# Click song link
-#bpm_results_song.click()
-#song_results_song.click()
-   
-
-results = song_driver.find_elements_by_xpath('//*[@href]')
-
-for i, val in enumerate(results):
-	if val.get_attribute('class') == 'performers':
-		if val.text.split('by ')[1:] == [artist]:
-			print(results[i-1].get_attribute('href'))
-			
-	
-#bpm_search_result1 = bpm_driver.find_elements_by_css_selector()
-#bpm_search_result2 = bpm_driver.find_elements_by_css_selector(artist)
-song_search_result1 = song_driver.find_element_by_css_selector('div.title')
-song_search_result2 = song_driver.find_elements_by_css_selector('div.performers')
-
-# If song doesn't exist
-
-if len(bpm_search_result1) == 0 or len(bpm_search_result2) == 0 or \
-   len(song_search_result1) == 0 or len(song_search_result2) == 0:
-	print("Sorry! We can't find a song by that artist")
-	#exit()
-
-	#bpm_search_results = bpm_driver.find_elements_by_class_name('search_results')
-song_search_results = song_driver.find_elements_by_class_name('search-results')
-"""
+urllib.request.urlretrieve(img_src, "album_cover.jpg")
