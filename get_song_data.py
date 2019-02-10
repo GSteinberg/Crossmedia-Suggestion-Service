@@ -2,7 +2,8 @@ from bs4 import BeautifulSoup
 from selenium import webdriver
 import requests
 import shutil
-from urllib.request import urlopen
+import urllib
+import os, ssl
 
 def get_info(song, artist):
 	# Using Chrome to access web
@@ -61,6 +62,20 @@ def get_info(song, artist):
 		
 	# Get year
 	song_year = song_driver.find_element_by_class_name('song-release-year-text').text
+
+	# Get album cover
+	album_cover = song_driver.find_element_by_class_name('lazy')
+	album_cover.click()
+	# Get src text
+	image = song_driver.find_element_by_class_name("media-gallery-image")
+	img_src = image.get_attribute("src")
+
+	if not os.environ.get('PYTHONHTTPSVERIFY', '') and getattr(ssl, '_create_unverified_context', None): 
+		ssl._create_default_https_context = ssl._create_unverified_context
+	
+	print(img_src)
+	
+	urllib.request.urlretrieve(img_src, "album_cover.jpg")
 	
 	return [song_year, energy]
 
@@ -71,18 +86,5 @@ def main():
 main()
 
 """
-# Get album cover
-album_cover = song_driver.find_element_by_class_name('lazy')
-album_cover.click()
-# Get src text
-image = song_driver.find_element_by_tag_name("img")
-img_src = image.get_attribute("src")
-
-#urllib.request.urlretrieve(img_src, "album_cover.jpg")
-	  
-req = urlopen(img_src)
-gcontext = ssl.SSLContext(ssl.PROTOCOL_TLSv1)  # Only for gangstars
-info = urlopen(req, context=gcontext).read()
-
  and i-31 == artist_idx
 """
